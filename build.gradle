@@ -37,12 +37,6 @@ allprojects {
 
         constraints {
             ['com.github.javafaker:javafaker:0.16',
-             'io.dropwizard.metrics:metrics-core:+',
-             'org.beryx:text-io:3.3.0',
-             'org.beryx:text-io-web:3.3.0',
-             'org.fusesource.jansi:jansi:1.17.1',
-             'org.codehaus.groovy:groovy-all:2.5.6',
-             'com.google.guava:guava:27.1-jre',
             ].each {
                 implementation it
             }
