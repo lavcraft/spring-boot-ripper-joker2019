@@ -1,0 +1,88 @@
+buildscript {
+    ext {
+        springBootVersion = '2.2.0.RELEASE'
+    }
+    repositories { jcenter() }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+apply plugin: 'base'
+
+allprojects {
+    group = 'ru.spring.reactive.in.practice'
+    description = 'Demo project for Spring Boot'
+}
+
+allprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        [enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"),
+         platform('org.junit:junit-bom:5.5.2'),
+        ].each {
+            implementation it
+            annotationProcessor it
+            testAnnotationProcessor it
+        }
+
+        constraints {
+            ['com.github.javafaker:javafaker:0.16',
+             'io.dropwizard.metrics:metrics-core:+',
+             'org.beryx:text-io:3.3.0',
+             'org.beryx:text-io-web:3.3.0',
+             'org.fusesource.jansi:jansi:1.17.1',
+             'org.codehaus.groovy:groovy-all:2.5.6',
+             'com.google.guava:guava:27.1-jre',
+            ].each {
+                implementation it
+            }
+
+            ['org.mockito:mockito-core:2.22.0',
+             'org.mockito:mockito-junit-jupiter:2.22.0',
+             'io.github.benas:random-beans:3.7.0',
+            ].each {
+                testImplementation it
+            }
+        }
+
+        //declare dependencies
+        ['org.projectlombok:lombok',
+         'org.springframework.boot:spring-boot-configuration-processor',
+        ].each {
+            compileOnly it
+            testCompileOnly it
+            annotationProcessor it
+            testAnnotationProcessor it
+        }
+
+        implementation 'org.springframework.boot:spring-boot-starter-webflux',
+                'io.projectreactor:reactor-tools'
+
+        testImplementation 'org.mockito:mockito-core',
+                'org.mockito:mockito-junit-jupiter',
+                'org.junit.jupiter:junit-jupiter-engine',
+                'io.projectreactor:reactor-test',
+                'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            exceptionFormat = 'full'
+            events 'passed', 'skipped', 'failed'
+        }
+        reports {
+            html.enabled = true
+        }
+    }
+}
